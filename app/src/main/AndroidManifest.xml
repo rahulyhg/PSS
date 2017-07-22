@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.dp.patidatsamajdirectoryapp">
+
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".mainActivities.SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".mainActivities.LoginActivity"
+            android:theme="@style/LoginTheme" />
+        <activity
+            android:name=".mainActivities.WelcomeActivity"
+            android:theme="@style/WelcomeTheme" />
+        <activity android:name=".mainActivities.MainActivity" />
+        <activity android:name=".mainActivities.RegisterActivity" />
+        <activity android:name=".activities.AddMember" />
+        <activity android:name=".activities.Agriculture" />
+        <activity android:name=".activities.Business" />
+        <activity android:name=".activities.BloodBank" />
+        <activity android:name=".activities.Calendar" />
+        <activity android:name=".activities.Directory" />
+        <activity android:name=".activities.Karyakarini" />
+        <activity android:name=".activities.Events" />
+        <activity android:name=".activities.Helpline" />
+        <activity android:name=".activities.History" />
+        <activity android:name=".activities.Education" />
+        <activity android:name=".activities.Jobs" />
+        <activity android:name=".activities.Matrimonial" />
+        <activity android:name=".activities.News" />
+        <activity android:name=".activities.Sandesh" />
+        <activity android:name=".activities.Settings" />
+        <activity android:name=".activities.DirectoryList"></activity>
+    </application>
+
+</manifest>

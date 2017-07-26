@@ -44,8 +44,9 @@ public class DirectoryListAdapter extends RecyclerView.Adapter<DirectoryListAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        holder.name.setText(usersData.get(position).getName());
+        holder.name.setText(usersData.get(position).getName()+" "+usersData.get(position).getLastName());
         holder.occupation.setText(usersData.get(position).getOccupation());
+        holder.mobile.setText(usersData.get(position).getMobile());
         holder.call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,13 +79,14 @@ public class DirectoryListAdapter extends RecyclerView.Adapter<DirectoryListAdap
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        TextView name,occupation;
+        TextView name,occupation,mobile;
         ImageButton call;
 
         public ViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.name);
             occupation = (TextView) itemView.findViewById(R.id.occupation);
+            mobile = (TextView)itemView.findViewById(R.id.mobile);
             occupation.setSelected(true);
             call = (ImageButton) itemView.findViewById(R.id.call);
         }

@@ -11,7 +11,9 @@ import android.widget.TextView;
 
 import com.dp.patidatsamajdirectoryapp.R;
 import com.dp.patidatsamajdirectoryapp.activities.AddMember;
-import com.dp.patidatsamajdirectoryapp.activities.Directory;
+import com.dp.patidatsamajdirectoryapp.activities.Agriculture;
+import com.dp.patidatsamajdirectoryapp.activities.BloodBank;
+import com.dp.patidatsamajdirectoryapp.activities.DirectoryStateList;
 
 /**
  * Created by ps11 on 01/07/17.
@@ -87,8 +89,10 @@ public class MainGridAdapter extends RecyclerView.Adapter<MainGridAdapter.ViewHo
                     String text = holder.text.getText().toString();
                     switch(text){
 
-                        case "Add Member" : {context.startActivity(new Intent(context, AddMember.class));}
-                        case "Directory" : {context.startActivity(new Intent(context, Directory.class));}
+                        case "Add Member" : {context.startActivity(new Intent(context, AddMember.class)); break;}
+                        case "Directory" : {context.startActivity(new Intent(context, DirectoryStateList.class)); break;}
+                        case "Agriculture" : {context.startActivity(new Intent(context, Agriculture.class)); break;}
+                        case "Blood Bank" : {context.startActivity(new Intent(context, BloodBank.class)); break;}
 
                     }
                 }

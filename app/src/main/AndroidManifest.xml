@@ -33,7 +33,7 @@
         <activity android:name=".activities.Business" />
         <activity android:name=".activities.BloodBank" />
         <activity android:name=".activities.Calendar" />
-        <activity android:name=".activities.Directory" />
+        <activity android:name=".activities.DirectoryStateList"/>
         <activity android:name=".activities.Karyakarini" />
         <activity android:name=".activities.Events" />
         <activity android:name=".activities.Helpline" />
@@ -44,7 +44,11 @@
         <activity android:name=".activities.News" />
         <activity android:name=".activities.Sandesh" />
         <activity android:name=".activities.Settings" />
-        <activity android:name=".activities.DirectoryList"></activity>
+        <activity
+            android:name=".activities.DirectoryList"
+            android:label="@string/users"
+            android:theme="@style/DirectoryListTheme" />
+        <activity android:name=".activities.DirectoryCityList"></activity>
     </application>
 
 </manifest>

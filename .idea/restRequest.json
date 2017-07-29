@@ -1,0 +1,6 @@
+{
+  "uri": "http://localhost:3000/scep/1/pkiclient.exe?operation\u003dGetCACaps",
+  "method": "GET",
+  "body": "",
+  "headers": {}
+}

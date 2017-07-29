@@ -23,6 +23,7 @@ public class Data {
         this.lastIndex = lastIndex;
     }
 
+
     public List<User> getUsers() {
         return users;
     }

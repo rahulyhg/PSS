@@ -26,7 +26,7 @@
         <activity
             android:name=".mainActivities.WelcomeActivity"
             android:theme="@style/WelcomeTheme" />
-        <activity android:name=".mainActivities.MainActivity" />
+        <activity android:name=".mainActivities.MainActivity" android:theme="@style/MainGridTheme" />
         <activity android:name=".mainActivities.RegisterActivity" />
         <activity android:name=".activities.AddMember" />
         <activity android:name=".activities.Agriculture" />

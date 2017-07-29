@@ -6,7 +6,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorPrimary">@color/cardview_light_background</item>
+        <item name="android:textColorPrimary">@android:color/background_dark</item>
+        <item name="android:textColorPrimaryInverse">@android:color/background_dark</item>
+        <item name="android:textColorSecondary">@android:color/background_dark</item>
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -28,10 +30,16 @@
     </style>
 
 
-    <style name="DirectoryListTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="DirectoryListTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/splashStauts</item>
         <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="MainGridTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#1976d2</item>
+        <item name="colorPrimaryDark">#212121</item>
+        <item name="colorAccent">#283593</item>
     </style>
 
 </resources>

@@ -6,24 +6,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.dp.patidatsamajdirectoryapp.R;
-import com.dp.patidatsamajdirectoryapp.pojo.directoryStateResponse.LastDatum;
+import com.dp.patidatsamajdirectoryapp.mainActivities.MainActivity;
 import com.dp.patidatsamajdirectoryapp.utils.SharedPrefUtil;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class DirectoryStateList extends AppCompatActivity {
 
 
-List<LastDatum> stateData;
-    //Spinner state,city;
-    //Button search;
-    String selectedCity;
+    Button back;
+    AutoCompleteTextView search;
     ListView list;
     SharedPrefUtil mSharedPrefUtil;
     Set stateList;
@@ -35,19 +34,43 @@ List<LastDatum> stateData;
         list = (ListView) findViewById(R.id.list);
         mSharedPrefUtil=new SharedPrefUtil(DirectoryStateList.this);
         stateList = new HashSet();
+        search = (AutoCompleteTextView)findViewById(R.id.search);
+
         stateList = mSharedPrefUtil.retrieveStringSet("States",new HashSet());
         final ArrayList<String> statesInArray = new ArrayList<String>(stateList);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1,statesInArray );
+                R.layout.prototype_cell_list_generic, android.R.id.text1,statesInArray );
         list.setAdapter(adapter);
+
+        ArrayAdapter<String> searchAdapter = new ArrayAdapter<String>(DirectoryStateList.this,
+                android.R.layout.simple_dropdown_item_1line,statesInArray);
+        search.setAdapter(searchAdapter);
+
+
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(i>0) {
                     Intent intent = new Intent(DirectoryStateList.this, DirectoryCityList.class);
                     intent.putExtra("STATE", statesInArray.get(i));
                     startActivity(intent);
-                }
+            }
+        });
+        back = (Button)findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(DirectoryStateList.this, MainActivity.class));
+            }
+        });
+
+        search.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+                Intent intent = new Intent(DirectoryStateList.this, DirectoryCityList.class);
+                intent.putExtra("STATE", (String)adapterView.getItemAtPosition(i));
+                startActivity(intent);
             }
         });
     }

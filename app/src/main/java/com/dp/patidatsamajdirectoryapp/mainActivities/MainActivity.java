@@ -77,7 +77,6 @@ SharedPrefUtil mSharedPrefUtil;
                 if (response.isSuccessful()) {
                     stateData =   response.body().getData().getLastData();
                     stateList = new HashSet<String>();
-                    stateList.add("States");
                     for (int i = 0; i < stateData.size(); i++) {
                         stateList.add(stateData.get(i).getStateName());
                     }

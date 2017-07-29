@@ -47,22 +47,22 @@ public class MainGridAdapter extends RecyclerView.Adapter<MainGridAdapter.ViewHo
     R.mipmap.seting,};
 
     String texts[] = {
-            "Add Member",
-            "Agriculture",
-            "Business",
-            "Blood Bank",
-            "Calendar",
-            "Directory",
-            "Education",
-            "Event",
-            "Help Line",
-            "History",
-            "Karyakarini",
-            "Jobs",
-            "Matrimonial",
-            "News",
-            "Sandesh",
-            "Settings"
+            "ADD MEMBER",
+            "AGRICULTURE",
+            "BUSINESS",
+            "BLOOD BANK",
+            "CALENDAR",
+            "DIRECTORY",
+            "EDUCATION",
+            "EVENT",
+            "HELP LINE",
+            "HISTORY",
+            "KARYAKARINI",
+            "JOBS",
+            "MATRIMONIAL",
+            "NEWS",
+            "SANDESH",
+            "SETTINGS"
     };
 
 
@@ -89,10 +89,10 @@ public class MainGridAdapter extends RecyclerView.Adapter<MainGridAdapter.ViewHo
                     String text = holder.text.getText().toString();
                     switch(text){
 
-                        case "Add Member" : {context.startActivity(new Intent(context, AddMember.class)); break;}
-                        case "Directory" : {context.startActivity(new Intent(context, DirectoryStateList.class)); break;}
-                        case "Agriculture" : {context.startActivity(new Intent(context, Agriculture.class)); break;}
-                        case "Blood Bank" : {context.startActivity(new Intent(context, BloodBank.class)); break;}
+                        case "ADD MEMBER" : {context.startActivity(new Intent(context, AddMember.class)); break;}
+                        case "DIRECTORY" : {context.startActivity(new Intent(context, DirectoryStateList.class)); break;}
+                        case "AGRICULTURE" : {context.startActivity(new Intent(context, Agriculture.class)); break;}
+                        case "BLOOD BANK" : {context.startActivity(new Intent(context, BloodBank.class)); break;}
 
                     }
                 }

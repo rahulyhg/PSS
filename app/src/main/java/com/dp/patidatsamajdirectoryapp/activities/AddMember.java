@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -173,7 +174,20 @@ public class AddMember extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    Toast.makeText(AddMember.this, "Called", Toast.LENGTH_SHORT).show();
+
+                    int id = marital.getCheckedRadioButtonId();
+                    if(id!=-1){
+                        RadioButton rb = (RadioButton)findViewById(id);
+                        selectedStatus = rb.getText().toString();
+                    }
+
+                    int idGender = gender.getCheckedRadioButtonId();
+                    if(id!=-1){
+                        RadioButton rb = (RadioButton)findViewById(idGender);
+                        selectedGender = rb.getText().toString();
+                    }
+
+
                     registerMember();
                 } catch (JSONException e) {
                     e.printStackTrace();

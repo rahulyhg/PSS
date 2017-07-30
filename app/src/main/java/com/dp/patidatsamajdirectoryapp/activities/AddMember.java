@@ -1,8 +1,13 @@
 package com.dp.patidatsamajdirectoryapp.activities;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -10,12 +15,23 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.dp.patidatsamajdirectoryapp.R;
+import com.dp.patidatsamajdirectoryapp.mainActivities.MainActivity;
 import com.dp.patidatsamajdirectoryapp.network.AddMemberCalls;
+import com.dp.patidatsamajdirectoryapp.network.DirectoryCalls;
 import com.dp.patidatsamajdirectoryapp.network.Utils;
+import com.dp.patidatsamajdirectoryapp.pojo.directoryCityResponse.CityResponse;
+import com.dp.patidatsamajdirectoryapp.pojo.directoryCityResponse.LastDatum;
 import com.dp.patidatsamajdirectoryapp.pojo.register.RegisterResponse;
+import com.dp.patidatsamajdirectoryapp.utils.ProgressDialogUtil;
+import com.dp.patidatsamajdirectoryapp.utils.SharedPrefUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,14 +46,17 @@ public class AddMember extends AppCompatActivity {
     Spinner bloodGroup,state,district;
     RadioGroup gender,marital;
     Button submit;
+    ArrayList<String> bloodGroups, cities;
     String selectedGender="M", selectedStatus="Single", selectedBloodGroup="O +ve", selectedState="Madhya Pradesh", selectedDistrict="dhar";
-
+    SharedPrefUtil sharedPrefUtil;
+    private Set<String> stateList;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_member);
+
 
         name = (EditText)findViewById(R.id.name);
         surName = (EditText)findViewById(R.id.surname);
@@ -66,6 +85,89 @@ public class AddMember extends AppCompatActivity {
         marital = (RadioGroup)findViewById(R.id.marital_status);
 
         submit = (Button)findViewById(R.id.submit);
+        back=(Button)findViewById(R.id.back);
+        sharedPrefUtil = new SharedPrefUtil(this);
+
+
+        bloodGroups = new ArrayList<String>();
+        bloodGroups.add("A +ve");
+        bloodGroups.add("A -ve");
+        bloodGroups.add("B +ve");
+        bloodGroups.add("B-+ve");
+        bloodGroups.add("AB +ve");
+        bloodGroups.add("AB -ve");
+        bloodGroups.add("O +ve");
+        bloodGroups.add("O -ve");
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, bloodGroups);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        bloodGroup.setAdapter(adapter);
+
+        stateList = sharedPrefUtil.retrieveStringSet("States",new HashSet());
+        final ArrayList<String> statesInArray = new ArrayList<String>(stateList);
+        ArrayAdapter<String> statesAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, statesInArray);
+        statesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        state.setAdapter(statesAdapter);
+
+        bloodGroup.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+               selectedBloodGroup=(String)adapterView.getSelectedItem();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+
+        state.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedState = (String)adapterView.getSelectedItem();
+                    getCities((String)adapterView.getSelectedItem());
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        district.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedDistrict = (String)adapterView.getSelectedItem();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(AddMember.this, MainActivity.class));
+
+            }
+        });
+
+        district.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +187,7 @@ public class AddMember extends AppCompatActivity {
 
     public void registerMember() throws JSONException {
 
+        ProgressDialogUtil.showProgressDialog(AddMember.this,"Adding Member...");
 
         Retrofit adapter = new Retrofit.Builder()
                 .baseUrl("http://patidarsamajsangthan.com/")
@@ -99,7 +202,7 @@ public class AddMember extends AppCompatActivity {
 
         data.put("name", name.getText().toString());
         data.put("lname", surName.getText().toString());
-        data.put("uid", "1347");
+        data.put("uid", sharedPrefUtil.retrieveString("uid","1347"));
         data.put("fname",fatherName.getText().toString());
         data.put("gotra",gotra.getText().toString());
         data.put("tehsil",tehsil.getText().toString());
@@ -129,20 +232,103 @@ public class AddMember extends AppCompatActivity {
         response.enqueue(new Callback<RegisterResponse>() {
             @Override
             public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
-                Toast.makeText(AddMember.this, response.body().getResponseMessage(), Toast.LENGTH_SHORT).show();
+                ProgressDialogUtil.hideProgressDialog();
+                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(AddMember.this);
+                if(response.body().getResponseCode()==200) {
+
+                    alertDialogBuilder.setMessage(response.body().getResponseMessage());
+                    alertDialogBuilder.setPositiveButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    startActivity(new Intent(AddMember.this, MainActivity.class));
+                                }
+                            });
+                    alertDialogBuilder.setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                    startActivity(new Intent(AddMember.this, MainActivity.class));
+
+                                }
+                            });
+                    alertDialogBuilder.show();
+
+                }
+                else{
+                    alertDialogBuilder.setMessage(response.body().getResponseMessage());
+                    alertDialogBuilder.setPositiveButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+
+                                }
+                            });
+                    alertDialogBuilder.setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.dismiss();
+                                }
+                            });
+                    alertDialogBuilder.show();
+                }
             }
 
             @Override
             public void onFailure(Call<RegisterResponse> call, Throwable t) {
+                ProgressDialogUtil.hideProgressDialog();
                 Toast.makeText(AddMember.this, "Internet Not Connected", Toast.LENGTH_SHORT).show();
             }
         });
 
+    }
 
+    private void getCities(String stateName) {
+        ProgressDialogUtil.showProgressDialog(AddMember.this, "Getting Cities...");
 
+        Retrofit adapter = new Retrofit.Builder()
+                .baseUrl("http://patidarsamajsangthan.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(Utils.getUnsafeOkHttpClient())
+                .build();
 
+        JSONObject data = new JSONObject();
+        try {
+            data.put("DataType", "CITY");
+            data.put("DataValue", stateName);
+            data.put("lastIndex","0");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        DirectoryCalls service = adapter.create(DirectoryCalls.class);
+        Call<CityResponse> response =  service.getCities(data);
 
-
+        response.enqueue(new Callback<CityResponse>() {
+            @Override
+            public void onResponse(Call<CityResponse> call, Response<CityResponse> response) {
+                if (response.isSuccessful()) {
+                    List<LastDatum> cityData =   response.body().getData().getLastData();
+                    cities = new ArrayList<String>();
+                    for (int i = 0; i < cityData.size(); i++) {
+                        cities.add(cityData.get(i).getCity());
+                    }
+                    ProgressDialogUtil.hideProgressDialog();
+                    final ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddMember.this,
+                            android.R.layout.simple_spinner_item, cities);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    district.setAdapter(adapter);
+                }
+            }
+            @Override
+            public void onFailure(Call<CityResponse> call, Throwable t) {
+                ProgressDialogUtil.hideProgressDialog();
+                Toast.makeText(AddMember.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
     }

@@ -87,7 +87,6 @@ public class LoginActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                         if(response.body()!=null)
                             if(response.body().getResponseCode()==200){
-                                Toast.makeText(LoginActivity.this, response.body().getData().getPersonalInfo().getId(), Toast.LENGTH_SHORT).show();
                                 sharedPrefUtil.addString("mobile", response.body().getData().getPersonalInfo().getMobile());
                                 sharedPrefUtil.addString("uid", response.body().getData().getPersonalInfo().getId());
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
